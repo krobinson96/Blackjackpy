@@ -49,8 +49,30 @@ def initGame(deck):
     dealer = []
     player.append(deck.pop(0))
     dealer.append(deck.pop(0))
-    player.append(deck.pop(0))   
+    player.append(deck.pop(0))
     return player,dealer,0,0   
+    
+def printDealer1stHand(hand):
+    string = ""
+    suit = hand[0].cardSuit() # temp value to hold suit
+    face = hand[0].cardFace() # temp value to hold face
+    '''
+    suit = suit.replace("SPADES","♠️")
+    suit = suit.replace("HEARTS","♥️")
+    suit = suit.replace("DIAMONDS","♦️")
+    suit = suit.replace("CLUBS","♣️")
+    face = str(face).replace("ACE","A")
+    face = str(face).replace("JACK","J")
+    face = str(face).replace("QUEEN","Q")
+    face = str(face).replace("KING","K")
+    '''
+    print("------------")
+    print("DEALER CARDS")
+    print("------------")
+    string += str(face) + " OF " + suit + " " 
+    string += "Total: " + str(hand[0].cardWorth())
+    print(string)
+    return hand[0].cardWorth()
 
 # Updates hand worth and prints cards in hand    
 def printCards(hand, id):
@@ -69,12 +91,13 @@ def printCards(hand, id):
         print("------------")
         for i in hand:
             i.printCard()
-        handCards = detWorth(hand)
+        handCards = detWorth(hand)            
         print(str(handCards) + " - Dealer")
         return handCards
         
 def main():
     points = 0
+    
     while points == 0:
         try:
             points = int(input("How many points to start: "))
@@ -86,6 +109,7 @@ def main():
 
     game_playing = True
     while game_playing:
+        is_hitting = False
         print(f"Points available: {points}")
         if points == 0:
             print("Game Over - Out of Points")
@@ -103,7 +127,7 @@ def main():
         reshuffleDeck(deck,ddeck)
         player, dealer, playerCards, dealerCards = initGame(deck)
         playerCards = printCards(player,0)
-        dealerCards = printCards(dealer,1)
+        dealerCards = printDealer1stHand(dealer)
 
         if playerCards == 21 and dealerCards < 21:
             print("You Win")
@@ -111,8 +135,7 @@ def main():
             points = points + wager
             continue
 
-        print("Would you like to hit?")
-        is_hitting = False
+        print("Would you like to hit?")        
         if input() == "hit":
             is_hitting = True
         while is_hitting:
@@ -134,7 +157,7 @@ def main():
                 is_hitting = True
             else:
                 is_hitting = False
-
+            
         if playerCards > 20: # Check if hand has busted or won outside of hitting loop
             continue
 
